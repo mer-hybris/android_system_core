@@ -998,25 +998,30 @@ int main(int argc, char** argv) {
     // Clear the umask.
     umask(0);
 
-    add_environment("PATH", _PATH_DEFPATH);
+//    add_environment("PATH", _PATH_DEFPATH);
 
-    bool is_first_stage = (argc == 1) || (strcmp(argv[1], "--second-stage") != 0);
+//    bool is_first_stage = (argc == 1) || (strcmp(argv[1], "--second-stage") != 0);
 
-    // Get the basic filesystem setup we need put together in the initramdisk
-    // on / and then we'll let the rc file figure out the rest.
-    if (is_first_stage) {
-        mount("tmpfs", "/dev", "tmpfs", MS_NOSUID, "mode=0755");
-        mkdir("/dev/pts", 0755);
-        mkdir("/dev/socket", 0755);
-        mount("devpts", "/dev/pts", "devpts", 0, NULL);
-        mount("proc", "/proc", "proc", 0, NULL);
-        mount("sysfs", "/sys", "sysfs", 0, NULL);
-    }
+//    // Get the basic filesystem setup we need put together in the initramdisk
+//    // on / and then we'll let the rc file figure out the rest.
+//    if (is_first_stage) {
+//        mount("tmpfs", "/dev", "tmpfs", MS_NOSUID, "mode=0755");
+//        mkdir("/dev/pts", 0755);
+//        mkdir("/dev/socket", 0755);
+//        mount("devpts", "/dev/pts", "devpts", 0, NULL);
+//        mount("proc", "/proc", "proc", 0, NULL);
+//        mount("sysfs", "/sys", "sysfs", 0, NULL);
+//    }
 
-    // We must have some place other than / to create the device nodes for
-    // kmsg and null, otherwise we won't be able to remount / read-only
-    // later on. Now that tmpfs is mounted on /dev, we can actually talk
-    // to the outside world.
+    /* indicate that booting is in progress to background fw loaders, etc */
+    close(open("/dev/.booting", O_WRONLY | O_CREAT, 0000));
+
+        /* We must have some place other than / to create the
+         * device nodes for kmsg and null, otherwise we won't
+         * be able to remount / read-only later on.
+         * Now that tmpfs is mounted on /dev, we can actually
+         * talk to the outside world.
+         */
     open_devnull_stdio();
     klog_init();
     klog_set_level(KLOG_NOTICE_LEVEL);
