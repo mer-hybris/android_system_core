@@ -561,6 +561,8 @@ service ueventd /sbin/ueventd
     class core
     critical
     seclabel u:r:ueventd:s0
+# Not used by Mer
+    disabled
 
 service logd /system/bin/logd
     class core
@@ -605,9 +607,10 @@ on property:ro.kernel.qemu=1
 
 service lmkd /system/bin/lmkd
     class core
-    critical
     socket lmkd seqpacket 0660 system system
     writepid /dev/cpuset/system-background/tasks
+    disabled
+
 
 service servicemanager /system/bin/servicemanager
     class core
@@ -615,10 +618,10 @@ service servicemanager /system/bin/servicemanager
     group system
     critical
     onrestart restart healthd
-    onrestart restart zygote
-    onrestart restart media
-    onrestart restart surfaceflinger
-    onrestart restart drm
+#    onrestart restart zygote
+#    onrestart restart media
+#    onrestart restart surfaceflinger
+#    onrestart restart drm
 
 service vold /system/bin/vold \
         --blkid_context=u:r:blkid:s0 --blkid_untrusted_context=u:r:blkid_untrusted:s0 \
@@ -627,6 +630,8 @@ service vold /system/bin/vold \
     socket vold stream 0660 root mount
     socket cryptd stream 0660 root mount
     ioprio be 2
+    # Not used in Mer
+    disabled
 
 service netd /system/bin/netd
     class main
@@ -634,6 +639,8 @@ service netd /system/bin/netd
     socket dnsproxyd stream 0660 root inet
     socket mdns stream 0660 root system
     socket fwmarkd stream 0660 root inet
+    # Not used in Mer
+    disabled
 
 service debuggerd /system/bin/debuggerd
     class main
@@ -651,23 +658,27 @@ service ril-daemon /system/bin/rild
     user root
     group radio cache inet misc audio log
 
+# Disabled in Mer - used only during porting atm
 service surfaceflinger /system/bin/surfaceflinger
     class core
     user system
     group graphics drmrpc
     onrestart restart zygote
     writepid /dev/cpuset/system-background/tasks
+    disabled
 
 service drm /system/bin/drmserver
     class main
     user drm
     group drm system inet drmrpc
 
+# Disabled in Mer
 service media /system/bin/mediaserver
     class main
     user media
     group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc mediadrm
     ioprio rt 4
+    disabled
 
 # One shot invocation to deal with encrypted volume.
 service defaultcrypto /system/bin/vdc --wait cryptfs mountdefaultencrypted
@@ -718,10 +729,13 @@ service mtpd /system/bin/mtpd
     disabled
     oneshot
 
+# disabled in Mer
 service keystore /system/bin/keystore /data/misc/keystore
     class main
     user keystore
     group keystore drmrpc
+    # Not used in Mer
+    disabled
 
 service dumpstate /system/bin/dumpstate -s
     class main
