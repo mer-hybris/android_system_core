@@ -31,7 +31,7 @@ on early-init
     mount cgroup none /acct cpuacct
     mkdir /acct/uid
 
-    start ueventd
+    #start ueventd
 
 on init
     sysclktz 0
