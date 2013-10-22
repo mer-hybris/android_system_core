@@ -49,7 +49,10 @@ on init
     copy /default.prop /dev/urandom
 
     # Backward compatibility.
-    symlink /system/etc /etc
+    #symlink /system/etc /etc
+
+    loglevel 64
+
     symlink /sys/kernel/debug /d
 
     # Link /vendor to /system/vendor for devices without a vendor partition.
@@ -316,12 +319,12 @@ on post-fs
     start vndservicemanager
 
     # once everything is setup, no need to modify /
-    mount rootfs rootfs / ro remount
+    # mount rootfs rootfs / ro remount
     # Mount shared so changes propagate into child namespaces
-    mount rootfs rootfs / shared rec
+    # mount rootfs rootfs / shared rec
     # Mount default storage into root namespace
-    mount none /mnt/runtime/default /storage bind rec
-    mount none none /storage slave rec
+    # mount none /mnt/runtime/default /storage bind rec
+    # mount none none /storage slave rec
 
     # Make sure /sys/kernel/debug (if present) is labeled properly
     # Note that tracefs may be mounted under debug, so we need to cross filesystems
