@@ -458,6 +458,9 @@ static void handle_property_set(SocketConnection& socket,
 static void handle_property_set_fd() {
     static constexpr uint32_t kDefaultSocketTimeout = 2000; /* ms */
 
+    char rproperty[PROP_VALUE_MAX];
+    const prop_info *pi;
+
     int s = accept4(property_set_fd, nullptr, nullptr, SOCK_CLOEXEC);
     if (s == -1) {
         return;
@@ -512,7 +515,40 @@ static void handle_property_set_fd() {
         handle_property_set(socket, name, value, false);
         break;
       }
+    case PROP_MSG_GETPROP: {
+        int ret;
+        int n;
+        char prop_name[PROP_NAME_MAX];
+        char prop_value[PROP_VALUE_MAX];
+        prop_name[PROP_NAME_MAX-1] = 0;
+        prop_value[PROP_VALUE_MAX-1] = 0;
 
+        if (!is_legal_property_name(prop_name, strlen(prop_name))) {
+            ERROR("sys_prop: illegal property name. Got: \"%s\"\n", prop_name);
+            return;
+        }
+
+        /* If we have a value, copy it over, otherwise returns the default */
+        ret = __system_property_get(prop_name, rproperty);
+        if (ret) {
+            strlcpy(prop_value, rproperty, sizeof(prop_value));
+        }
+
+        /* Send the property value back */
+        //TEMP_FAILURE_RETRY(send(s, &msg, sizeof(msg), 0));
+        break;
+      }
+    case PROP_MSG_LISTPROP: {
+        int n;
+        char prop_name[PROP_NAME_MAX];
+        char prop_value[PROP_VALUE_MAX];
+        for(n = 0; (pi = __system_property_find_nth(n)); n++) {
+            prop_name[0] = prop_value[0] = 0;
+            __system_property_read(pi, prop_name, prop_value);
+            //TEMP_FAILURE_RETRY(send(s, &msg, sizeof(msg), 0));
+        }
+        break;
+      }
     default:
         LOG(ERROR) << "sys_prop: invalid command " << cmd;
         socket.SendUint32(PROP_ERROR_INVALID_CMD);

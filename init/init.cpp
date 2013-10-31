@@ -1117,6 +1117,7 @@ int main(int argc, char** argv) {
 
     signal_handler_init();
 
+
     property_load_boot_defaults();
     export_oem_lock_status();
     start_property_service();
@@ -1181,7 +1182,7 @@ int main(int argc, char** argv) {
     am.QueueBuiltinAction(queue_property_triggers_action, "queue_property_triggers");
 
     /* run all device triggers based on current state of device nodes in /dev */
-    am.QueueBuiltinAction(queue_device_triggers_action, "queue_device_triggers");
+    //am.QueueBuiltinAction(queue_device_triggers_action, "queue_device_triggers");
 
     /* Run actions when all boot up is done and init is ready */
     am.QueueEventTrigger("ready");
