@@ -751,6 +751,15 @@ service dumpstate /system/bin/dumpstate -s
 service uncrypt /system/bin/uncrypt
     class main
     disabled
+
+# This trigger is run by our modified init after boot has finished
+on ready
+    class_start mer
+
+# Notify Mer's systemd that we're done
+# This is started at the end of boot after both core and main classes
+service droid_init_done /bin/sh /usr/bin/droid/droid-init-done.sh
+    class mer
     oneshot
 
 service pre-recovery /system/bin/uncrypt --reboot
