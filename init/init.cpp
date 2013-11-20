@@ -1111,6 +1111,12 @@ int main(int argc, char** argv) {
     // Run all property triggers based on current state of the properties.
     queue_builtin_action(queue_property_triggers_action, "queue_property_triggers");
 
+    /* run all device triggers based on current state of device nodes in /dev */
+    queue_builtin_action(queue_device_triggers_action, "queue_device_triggers");
+
+    /* Run actions when all boot up is done and init is ready */
+    action_for_each_trigger("ready", action_add_queue_tail);
+
     while (true) {
         if (!waiting_for_exec) {
             execute_one_command();
