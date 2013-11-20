@@ -1180,6 +1180,12 @@ int main(int argc, char** argv) {
     // Run all property triggers based on current state of the properties.
     am.QueueBuiltinAction(queue_property_triggers_action, "queue_property_triggers");
 
+    /* run all device triggers based on current state of device nodes in /dev */
+    am.QueueBuiltinAction(queue_device_triggers_action, "queue_device_triggers");
+
+    /* Run actions when all boot up is done and init is ready */
+    am.QueueEventTrigger("ready");
+
     while (true) {
         // By default, sleep until something happens.
         int epoll_timeout_ms = -1;
