@@ -176,12 +176,13 @@ static void deleteFakeFd(int fd)
  */
 static void configureInitialState(const char* pathName, LogState* logState)
 {
-    static const int kDevLogLen = sizeof("/dev/log/") - 1;
-
     logState->debugName = strdup(pathName);
 
     /* identify binary logs */
-    if (strcmp(pathName + kDevLogLen, "events") == 0) {
+    // XXX hybris: Just in case we end up here with some app
+    // passing in /dev/log/ instead of /dev/alog/, compare both
+    if (strcmp(pathName, "/dev/log/events") == 0 ||
+            strcmp(pathName, "/dev/alog/events") == 0) {
         logState->isBinary = 1;
     }
 
