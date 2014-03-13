@@ -640,6 +640,9 @@ on boot
     # Define default initial receive window size in segments.
     setprop net.tcp.default_init_rwnd 60
 
+    # Allow system group to trigger vibrator
+    chmod 0664 /sys/class/timed_output/vibrator/enable
+
     # Start standard binderized HAL daemons
     class_start hal
 
