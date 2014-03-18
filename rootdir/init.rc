@@ -641,14 +641,13 @@ service vold /system/bin/vold \
     # Not used in Mer
     disabled
 
+# needed by `ndc softap fwreload wlan0 AP` command to reload mako firmware
 service netd /system/bin/netd
     class main
     socket netd stream 0660 root system
     socket dnsproxyd stream 0660 root inet
     socket mdns stream 0660 root system
     socket fwmarkd stream 0660 root inet
-    # Not used in Mer
-    disabled
 
 service debuggerd /system/bin/debuggerd
     class main
