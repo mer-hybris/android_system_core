@@ -500,6 +500,7 @@ on boot
     chmod 0664 /sys/class/timed_output/vibrator/enable
     class_start core
 
+# Never gets called, since Mer does its own 'mount_all'
 on nonencrypted
     class_start main
     class_start late_start
@@ -513,6 +514,10 @@ on property:vold.decrypt=trigger_encryption
 
 on property:sys.init_log_level=*
     loglevel ${sys.init_log_level}
+
+# Mer needs to set this property when fs units are mounted
+on property:droid.late_start=trigger_late_start
+    class_start late_start
 
 on charger
     class_start charger
