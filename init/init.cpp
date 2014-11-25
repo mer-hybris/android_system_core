@@ -1079,6 +1079,7 @@ int main(int argc, char** argv) {
 
     signal_handler_init();
 
+
     property_load_boot_defaults();
     start_property_service();
 
@@ -1115,7 +1116,7 @@ int main(int argc, char** argv) {
     queue_builtin_action(queue_property_triggers_action, "queue_property_triggers");
 
     /* run all device triggers based on current state of device nodes in /dev */
-    queue_builtin_action(queue_device_triggers_action, "queue_device_triggers");
+    //    queue_builtin_action(queue_device_triggers_action, "queue_device_triggers");
 
     /* Run actions when all boot up is done and init is ready */
     action_for_each_trigger("ready", action_add_queue_tail);
