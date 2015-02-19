@@ -634,10 +634,23 @@ service servicemanager /system/bin/servicemanager
     group system
     critical
     onrestart restart healthd
+    onrestart restart minimedia
+    onrestart restart minisf
 #    onrestart restart zygote
 #    onrestart restart media
 #    onrestart restart surfaceflinger
 #    onrestart restart drm
+
+service minimedia /usr/libexec/droid-hybris/system/bin/minimediaservice
+    class main
+    user media
+    group audio camera
+    ioprio rt 4
+
+service minisf /usr/libexec/droid-hybris/system/bin/minisfservice
+    class main
+    user system
+    group graphics
 
 service vold /system/bin/vold \
         --blkid_context=u:r:blkid:s0 --blkid_untrusted_context=u:r:blkid_untrusted:s0 \
