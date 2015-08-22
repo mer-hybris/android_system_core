@@ -725,6 +725,8 @@ service healthd /system/bin/healthd
     class core
     critical
     group root system wakelock
+# Not used by Mer - spams logs and small battery drain
+    disabled
 
 service console /system/bin/sh
     class core
