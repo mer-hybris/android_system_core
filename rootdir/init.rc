@@ -499,6 +499,7 @@ on boot
     # Allow system group to trigger vibrator
     chmod 0664 /sys/class/timed_output/vibrator/enable
     class_start core
+    class_start main
 
 # Never gets called, since Mer does its own 'mount_all'
 on nonencrypted
