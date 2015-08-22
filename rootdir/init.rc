@@ -647,6 +647,7 @@ on boot
     class_start hal
 
     class_start core
+    class_start main
 
 # Never gets called, since Mer does its own 'mount_all'
 on nonencrypted
