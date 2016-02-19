@@ -998,9 +998,9 @@ int main(int argc, char** argv) {
     // Clear the umask.
     umask(0);
 
-//    add_environment("PATH", _PATH_DEFPATH);
+    add_environment("PATH", _PATH_DEFPATH);
 
-//    bool is_first_stage = (argc == 1) || (strcmp(argv[1], "--second-stage") != 0);
+    bool is_first_stage = (argc == 1) || (strcmp(argv[1], "--second-stage") != 0);
 
 //    // Get the basic filesystem setup we need put together in the initramdisk
 //    // on / and then we'll let the rc file figure out the rest.
