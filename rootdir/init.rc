@@ -546,8 +546,9 @@ on zygote-start && property:ro.crypto.state=encrypted && property:ro.crypto.type
 on boot
     # basic network init
     ifup lo
-    hostname localhost
-    domainname localdomain
+# Conflicts with Mer
+    #hostname localhost
+    #domainname localdomain
 
     # Memory management.  Basic kernel parameters, and allow the high
     # level system server to be able to adjust the kernel OOM driver
