@@ -715,6 +715,8 @@ service ueventd /sbin/ueventd
     critical
     seclabel u:r:ueventd:s0
     shutdown critical
+#Not used by Mer
+    disabled
 
 service healthd /system/bin/healthd
     class core
