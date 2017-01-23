@@ -667,13 +667,16 @@ service vold /system/bin/vold \
 # Disabled in Mer: conflicts with connman beyond usability
 # This will no longer work for mako: `ndc softap fwreload wlan0 AP` to reload mako firmware
 # mako (and similar fwreload) porters need to seek for alternative solution, see NEMO#793
-service netd /system/bin/netd
-    class main
-    socket netd stream 0660 root system
-    socket dnsproxyd stream 0660 root inet
-    socket mdns stream 0660 root system
-    socket fwmarkd stream 0660 root inet
-    disabled
+#
+# In some Android 5+ cases, netd may still be launched by a depending service, so commenting
+# the whole block will ensure netd nevers starts.
+#service netd /system/bin/netd
+#    class main
+#    socket netd stream 0660 root system
+#    socket dnsproxyd stream 0660 root inet
+#    socket mdns stream 0660 root system
+#    socket fwmarkd stream 0660 root inet
+#    disabled
 
 service debuggerd /system/bin/debuggerd
     class main
