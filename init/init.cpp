@@ -873,6 +873,9 @@ static bool selinux_load_policy() {
 }
 
 static void selinux_initialize(bool in_kernel_domain) {
+    // Disable in Mer
+    return;
+
     Timer t;
 
     selinux_callback cb;

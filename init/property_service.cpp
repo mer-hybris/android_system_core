@@ -77,6 +77,8 @@ void property_init() {
 }
 
 static bool check_mac_perms(const std::string& name, char* sctx, struct ucred* cr) {
+    // Disable permission check in Mer
+    return true;
 
     if (!sctx) {
       return false;
