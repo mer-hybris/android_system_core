@@ -392,7 +392,7 @@ static void import_late(const std::vector<std::string>& args, size_t start_index
     if (end_index <= start_index) {
         // Fallbacks for partitions on which early mount isn't enabled.
         if (!parser.is_system_etc_init_loaded()) {
-            parser.ParseConfig("/system/etc/init");
+            parser.ParseConfig("/usr/libexec/droid-hybris/system/etc/init");
             parser.set_is_system_etc_init_loaded(true);
         }
         if (!parser.is_vendor_etc_init_loaded()) {
