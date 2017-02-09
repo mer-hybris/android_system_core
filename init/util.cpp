@@ -169,7 +169,8 @@ bool ReadFile(const std::string& path, std::string* content, std::string* err) {
     *err = "";
 
     android::base::unique_fd fd(
-        TEMP_FAILURE_RETRY(open(path.c_str(), O_RDONLY | O_NOFOLLOW | O_CLOEXEC)));
+    // Allow symlinks in Mer
+        TEMP_FAILURE_RETRY(open(path.c_str(), O_RDONLY | O_CLOEXEC)));
     if (fd == -1) {
         *err = "Unable to open '" + path + "': " + strerror(errno);
         return false;
