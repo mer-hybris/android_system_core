@@ -57,6 +57,8 @@ using android::base::WriteStringToFile;
 namespace android {
 namespace init {
 
+// Disable SELinux
+/*
 static std::string ComputeContextFromExecutable(std::string& service_name,
                                                 const std::string& service_path) {
     std::string computed_context;
@@ -93,6 +95,7 @@ static std::string ComputeContextFromExecutable(std::string& service_name,
     }
     return computed_context;
 }
+*/
 
 static void SetUpPidNamespace(const std::string& service_name) {
     constexpr unsigned int kSafeFlags = MS_NODEV | MS_NOEXEC | MS_NOSUID;
@@ -275,11 +278,14 @@ void Service::SetProcessAttributes() {
             PLOG(FATAL) << "setuid failed for " << name_;
         }
     }
+// Disable SELinux
+/*
     if (!seclabel_.empty()) {
         if (setexeccon(seclabel_.c_str()) < 0) {
             PLOG(FATAL) << "cannot setexeccon('" << seclabel_ << "') for " << name_;
         }
     }
+*/
     if (priority_ != 0) {
         if (setpriority(PRIO_PROCESS, 0, priority_) != 0) {
             PLOG(FATAL) << "setpriority failed for " << name_;
@@ -722,6 +728,8 @@ bool Service::Start() {
     }
 
     std::string scon;
+// Disable SELinux
+/*
     if (!seclabel_.empty()) {
         scon = seclabel_;
     } else {
@@ -730,7 +738,7 @@ bool Service::Start() {
             return false;
         }
     }
-
+*/
     LOG(INFO) << "starting service '" << name_ << "'...";
 
     pid_t pid = -1;
