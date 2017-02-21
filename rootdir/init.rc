@@ -8,7 +8,6 @@ import /init.environ.rc
 # Mer handles usb stuff
 #import /init.usb.rc
 import /init.${ro.hardware}.rc
-import /init.${ro.zygote}.rc
 
 on early-init
 
