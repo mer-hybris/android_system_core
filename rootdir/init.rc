@@ -646,6 +646,7 @@ service minisf /usr/libexec/droid-hybris/system/bin/minisfservice
     class main
     user system
     group graphics
+    setenv LD_LIBRARY_PATH /usr/libexec/droid-hybris/lib-dev-alog:/vendor/lib:/system/lib
 
 service miniaf /usr/libexec/droid-hybris/system/bin/miniafservice
     class main
