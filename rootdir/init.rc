@@ -820,3 +820,8 @@ service logcatd /system/bin/logcat -b all -v threadtime -v usec -v printable -D 
     user logd
     group log
     writepid /dev/cpuset/system-background/tasks
+    
+on property:hybris.shutdown=*
+    class_stop late_start
+    class_stop main
+    class_stop core
