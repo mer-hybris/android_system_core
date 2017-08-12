@@ -796,6 +796,12 @@ service droid_init_done /bin/sh /usr/bin/droid/droid-init-done.sh
     class mer
     oneshot
 
+# Gracefully shutdown android init services using new 'hybris.shutdown' property instead of killing them.
+on property:hybris.shutdown=*
+    class_stop late_start
+    class_stop main
+    class_stop core
+
 service pre-recovery /system/bin/uncrypt --reboot
     class main
     disabled
