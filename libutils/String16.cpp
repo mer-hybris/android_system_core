@@ -416,4 +416,9 @@ status_t String16::remove(size_t len, size_t begin)
     return NO_MEMORY;
 }
 
+size_t String16::size() const
+{
+    return SharedBuffer::sizeFromData(mString)/sizeof(char16_t)-1;
+}
+
 }; // namespace android
