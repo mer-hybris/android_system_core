@@ -65,7 +65,7 @@ public:
 
     inline  const char*         string() const;
     inline  size_t              size() const;
-    inline  size_t              length() const;
+            size_t              length() const;
     inline  size_t              bytes() const;
     inline  bool                isEmpty() const;
     
@@ -261,11 +261,6 @@ inline const String8 String8::empty() {
 inline const char* String8::string() const
 {
     return mString;
-}
-
-inline size_t String8::length() const
-{
-    return SharedBuffer::sizeFromData(mString)-1;
 }
 
 inline size_t String8::size() const

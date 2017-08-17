@@ -64,7 +64,7 @@ public:
                                 ~String16();
     
     inline  const char16_t*     string() const;
-    inline  size_t              size() const;
+            size_t              size() const;
     
     inline  const SharedBuffer* sharedBuffer() const;
     
@@ -142,11 +142,6 @@ inline int strictly_order_type(const String16& lhs, const String16& rhs)
 inline const char16_t* String16::string() const
 {
     return mString;
-}
-
-inline size_t String16::size() const
-{
-    return SharedBuffer::sizeFromData(mString)/sizeof(char16_t)-1;
 }
 
 inline const SharedBuffer* String16::sharedBuffer() const

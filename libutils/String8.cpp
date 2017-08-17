@@ -676,4 +676,9 @@ String8& String8::convertToResPath()
     return *this;
 }
 
+size_t String8::length() const
+{
+    return SharedBuffer::sizeFromData(mString)-1;
+}
+
 }; // namespace android
