@@ -1082,6 +1082,7 @@ int main(int argc, char** argv) {
 
 
     property_load_boot_defaults();
+    load_system_props();
     start_property_service();
 
     init_parse_config_file("/init.rc");

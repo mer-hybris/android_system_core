@@ -805,7 +805,8 @@ int do_load_persist_props(int nargs, char **args) {
 
 int do_load_system_props(int nargs, char **args) {
     if (nargs == 1) {
-        load_system_props();
+        INFO("skipping load of system props, since they have already been loaded");
+        //load_system_props();
         return 0;
     }
     return -1;
