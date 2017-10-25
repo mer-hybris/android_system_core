@@ -4,6 +4,11 @@
 # This is a common source of Android security bugs.
 #
 
+# this file is only necessary if your device is 32 bit and it is
+# using the android kernel logger if your device is 64 bit defining
+# LD_LIBRARY_PATH will break some binaries, since you cannot have both
+# 32 bit libraries and 64 bit libraries in your LD_LIBRARY_PATH.
+import /init.extraenv.${ro.product.cpu.abi}.rc
 import /init.environ.rc
 # Mer handles usb stuff
 #import /init.usb.rc

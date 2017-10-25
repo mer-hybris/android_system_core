@@ -8,6 +8,18 @@ LOCAL_MODULE := init.rc
 LOCAL_SRC_FILES := $(LOCAL_MODULE)
 LOCAL_MODULE_CLASS := ETC
 LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)
+LOCAL_REQUIRED_MODULES := init.extraenv.armeabi-v7a.rc
+
+include $(BUILD_PREBUILT)
+
+#######################################
+# init.extraenv.armeabi-v7a.rc
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := init.extraenv.armeabi-v7a.rc
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)
 
 include $(BUILD_PREBUILT)
 
