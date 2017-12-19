@@ -648,6 +648,7 @@ service minimedia /usr/libexec/droid-hybris/system/bin/minimediaservice
     user media
     group audio camera
     ioprio rt 4
+    setenv LD_PRELOAD /usr/libexec/droid-hybris/system/lib/libmedia.so:/usr/libexec/droid-hybris/system/lib/libstagefright_omx.so
 
 service minisf /usr/libexec/droid-hybris/system/bin/minisfservice
     class main
