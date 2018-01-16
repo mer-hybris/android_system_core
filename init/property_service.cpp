@@ -290,6 +290,13 @@ uint32_t property_set(const std::string& name, const std::string& value) {
     return PropertySetImpl(name, value);
 }
 
+// Legacy definition
+typedef struct prop_msg_s {
+    unsigned cmd;
+    char name[PROP_NAME_MAX];
+    char value[PROP_VALUE_MAX];
+} prop_msg_t;
+
 class SocketConnection {
  public:
   SocketConnection(int socket, const struct ucred& cred)
@@ -337,6 +344,17 @@ class SocketConnection {
   bool SendUint32(uint32_t value) {
     int result = TEMP_FAILURE_RETRY(send(socket_, &value, sizeof(value), 0));
     return result == sizeof(value);
+  }
+
+  bool SendLegacyPropMsg(std::string name, std::string value) {
+      int result = 0;
+      prop_msg_t prop_msg;
+      memset(&prop_msg, 0, sizeof(prop_msg_t));
+      prop_msg.cmd = 0;
+      strlcpy(prop_msg.name, name.c_str(), PROP_NAME_MAX);
+      strlcpy(prop_msg.value, value.c_str(), PROP_VALUE_MAX);
+      result = TEMP_FAILURE_RETRY(send(socket_, &prop_msg, sizeof(prop_msg_t), 0));
+      return (result == sizeof(prop_msg_t));
   }
 
   int socket() {
@@ -520,14 +538,21 @@ static void handle_property_set_fd() {
       }
     case PROP_MSG_GETPROP: {
         int ret;
-        int n;
         char prop_name[PROP_NAME_MAX];
         char prop_value[PROP_VALUE_MAX];
+
+        /* Need to receive both since libhybris sends prop_msg_t type package. */
+        if (!socket.RecvChars(prop_name, PROP_NAME_MAX, &timeout_ms) ||
+            !socket.RecvChars(prop_value, PROP_VALUE_MAX, &timeout_ms)) {
+          PLOG(ERROR) << "sys_prop(PROP_MSG_GETPROP): error while reading name from the socket";
+          return;
+        }
+
         prop_name[PROP_NAME_MAX-1] = 0;
         prop_value[PROP_VALUE_MAX-1] = 0;
 
-        if (!is_legal_property_name(prop_name, strlen(prop_name))) {
-            ERROR("sys_prop: illegal property name. Got: \"%s\"\n", prop_name);
+        if (!is_legal_property_name(prop_name)) {
+            PLOG(ERROR) << "sys_prop(PROP_MSG_GETPROP): illegal property name. Got: " << prop_name;
             return;
         }
 
@@ -538,7 +563,7 @@ static void handle_property_set_fd() {
         }
 
         /* Send the property value back */
-        //TEMP_FAILURE_RETRY(send(s, &msg, sizeof(msg), 0));
+        socket.SendLegacyPropMsg(prop_name, prop_value);
         break;
       }
     case PROP_MSG_LISTPROP: {
@@ -548,7 +573,7 @@ static void handle_property_set_fd() {
         for(n = 0; (pi = __system_property_find_nth(n)); n++) {
             prop_name[0] = prop_value[0] = 0;
             __system_property_read(pi, prop_name, prop_value);
-            //TEMP_FAILURE_RETRY(send(s, &msg, sizeof(msg), 0));
+            socket.SendLegacyPropMsg(prop_name, prop_value);
         }
         break;
       }
