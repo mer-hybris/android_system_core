@@ -1,7 +1,7 @@
 # set up the global environment
 on init
 
-    export PATH /sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
+    export PATH /vendor/bin:/system/sbin:/system/bin:/system/xbin
     # This is not 64-bit safe -stskeeps
     # Hopefully now it is - ghosalmartin
     # this breaks mixed 32/64-bit devices -mal
