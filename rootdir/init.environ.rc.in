@@ -1,6 +1,6 @@
 # set up the global environment
 on init
-    export PATH /sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
+    export PATH /vendor/bin:/system/sbin:/system/bin:/system/xbin
     # This is not 64-bit safe -stskeeps
     export LD_LIBRARY_PATH /usr/libexec/droid-hybris/lib-dev-alog:/vendor/lib:/system/lib
     export ANDROID_BOOTLOGO 1
