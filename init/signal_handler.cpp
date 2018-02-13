@@ -51,6 +51,10 @@ static void SIGCHLD_handler(int) {
     }
 }
 
+static void SIGHUP_handler(int) {
+    WARNING("SIGHUP received");
+}
+
 void signal_handler_init() {
     // Create a signalling mechanism for SIGCHLD.
     int s[2];
@@ -68,6 +72,12 @@ void signal_handler_init() {
     act.sa_handler = SIGCHLD_handler;
     act.sa_flags = SA_NOCLDSTOP;
     sigaction(SIGCHLD, &act, 0);
+
+    struct sigaction act_hup;
+    memset(&act_hup, 0, sizeof(act_hup));
+    act_hup.sa_handler = SIGHUP_handler;
+    act_hup.sa_flags = SA_NOCLDSTOP;
+    sigaction(SIGHUP, &act_hup, 0);
 
     ServiceManager::GetInstance().ReapAnyOutstandingChildren();
 
