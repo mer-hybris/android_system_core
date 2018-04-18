@@ -1099,7 +1099,10 @@ int main(int argc, char** argv) {
 
     // Make the time that init started available for bootstat to log.
     property_set("ro.boottime.init", getenv("INIT_STARTED_AT"));
+    // Mer: this seems to cause problems
+#if 0
     property_set("ro.boottime.init.selinux", getenv("INIT_SELINUX_TOOK"));
+#endif
 
     // Set libavb version for Framework-only OTA match in Treble build.
     const char* avb_version = getenv("INIT_AVB_VERSION");
