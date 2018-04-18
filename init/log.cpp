@@ -28,6 +28,8 @@ namespace init {
 
 void InitKernelLogging(char* argv[]) {
     // Make stdin/stdout/stderr all point to /dev/null.
+    // Disable SELinux
+    /*
     int fd = open("/sys/fs/selinux/null", O_RDWR);
     if (fd == -1) {
         int saved_errno = errno;
@@ -39,6 +41,7 @@ void InitKernelLogging(char* argv[]) {
     dup2(fd, 1);
     dup2(fd, 2);
     if (fd > 2) close(fd);
+    */
 
     android::base::InitLogging(argv, &android::base::KernelLogger);
 }
