@@ -462,6 +462,7 @@ bool FirstStageMountVBootV2::InitAvbHandle() {
 // ----------------
 // Mounts partitions specified by fstab in device tree.
 bool DoFirstStageMount() {
+#if DISABLED_FOR_HYBRIS_SUPPORT
     // Skips first stage mount if we're in recovery mode.
     if (IsRecoveryMode()) {
         LOG(INFO) << "First stage mount skipped (recovery mode)";
@@ -480,6 +481,8 @@ bool DoFirstStageMount() {
         return false;
     }
     return handle->DoFirstStageMount();
+#endif
+    return true;
 }
 
 void SetInitAvbVersionInRecovery() {
