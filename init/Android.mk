@@ -84,7 +84,6 @@ LOCAL_STATIC_LIBRARIES := \
     libdl \
     libsparse \
     libz \
-    libprocessgroup \
     libavb \
     libkeyutils \
 
