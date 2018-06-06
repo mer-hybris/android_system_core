@@ -80,7 +80,6 @@ cc_library_static {
         "libbase",
         "libselinux",
         "liblog",
-        "libprocessgroup",
     ],
 }
 
@@ -134,7 +133,6 @@ cc_binary {
         "libdl",
         "libsparse",
         "libz",
-        "libprocessgroup",
         "libavb",
         "libkeyutils",
     ],
