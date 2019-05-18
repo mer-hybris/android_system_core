@@ -2,8 +2,6 @@
 on init
 
     export PATH /vendor/bin:/system/sbin:/system/bin:/system/xbin
-    # This is not 64-bit safe -stskeeps
-    export LD_LIBRARY_PATH /usr/libexec/droid-hybris/lib-dev-alog:/vendor/lib:/system/lib
     export ANDROID_BOOTLOGO 1
     export ANDROID_ROOT /system
     export ANDROID_ASSETS /system/app
