@@ -64,6 +64,8 @@
 #include "ueventd.h"
 #include "watchdogd.h"
 
+#define SYSTEMD_SELINUX
+
 struct selabel_handle *sehandle;
 struct selabel_handle *sehandle_prop;
 
@@ -1027,7 +1029,11 @@ int main(int argc, char** argv) {
     klog_init();
     klog_set_level(KLOG_NOTICE_LEVEL);
 
+#ifdef SYSTEMD_SELINUX
+    NOTICE("init%s started! (SELinux init disabled)\n", is_first_stage ? "" : " second stage");
+#else
     NOTICE("init%s started!\n", is_first_stage ? "" : " second stage");
+#endif
 
     if (!is_first_stage) {
         // Indicate that booting is in progress to background fw loaders, etc.
@@ -1045,16 +1051,26 @@ int main(int argc, char** argv) {
         export_kernel_boot_props();
     }
 
+    // -----------------------------------------------------------------
+    // SELinux is enabled in systemd, don't run selinux init in here.
+    // -----------------------------------------------------------------
+#ifndef SYSTEMD_SELINUX
     // Set up SELinux, including loading the SELinux policy if we're in the kernel domain.
     selinux_initialize(is_first_stage);
+#endif
 
     // If we're in the kernel domain, re-exec init to transition to the init domain now
     // that the SELinux policy has been loaded.
     if (is_first_stage) {
+        // -----------------------------------------------------
+        // SELinux is enabled in systemd, don't run restorecon.
+        // -----------------------------------------------------
+#ifndef SYSTEMD_SELINUX
         if (restorecon("/init") == -1) {
             ERROR("restorecon failed: %s\n", strerror(errno));
             security_failure();
         }
+#endif
         char* path = argv[0];
         char* args[] = { path, const_cast<char*>("--second-stage"), nullptr };
         if (execv(path, args) == -1) {
@@ -1066,11 +1082,16 @@ int main(int argc, char** argv) {
     // These directories were necessarily created before initial policy load
     // and therefore need their security context restored to the proper value.
     // This must happen before /dev is populated by ueventd.
+    // -----------------------------------------------------
+    // SELinux is enabled in systemd, don't run restorecon.
+    // -----------------------------------------------------
+#ifndef SYSTEMD_SELINUX
     INFO("Running restorecon...\n");
     restorecon("/dev");
     restorecon("/dev/socket");
     restorecon("/dev/__properties__");
     restorecon_recursive("/sys");
+#endif
 
     epoll_fd = epoll_create1(EPOLL_CLOEXEC);
     if (epoll_fd == -1) {
