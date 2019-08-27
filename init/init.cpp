@@ -901,6 +901,12 @@ static selinux_enforcing_status selinux_status_from_cmdline() {
 
 static bool selinux_is_disabled(void)
 {
+    // -----------------------------------------------------------------
+    // SELinux is enabled in systemd, SELinux is always disabled here.
+    // -----------------------------------------------------------------
+#ifdef SYSTEMD_SELINUX
+    return true;
+#else
     if (ALLOW_DISABLE_SELINUX) {
         if (access("/sys/fs/selinux", F_OK) != 0) {
             // SELinux is not compiled into the kernel, or has been disabled
@@ -911,6 +917,7 @@ static bool selinux_is_disabled(void)
     }
 
     return false;
+#endif
 }
 
 static bool selinux_is_enforcing(void)
@@ -957,6 +964,9 @@ static void security_failure() {
 static void selinux_initialize(bool in_kernel_domain) {
     Timer t;
 
+#ifdef SYSTEMD_SELINUX
+    return;
+#endif
     selinux_callback cb;
     cb.func_log = selinux_klog_callback;
     selinux_set_callback(SELINUX_CB_LOG, cb);
@@ -1051,13 +1061,8 @@ int main(int argc, char** argv) {
         export_kernel_boot_props();
     }
 
-    // -----------------------------------------------------------------
-    // SELinux is enabled in systemd, don't run selinux init in here.
-    // -----------------------------------------------------------------
-#ifndef SYSTEMD_SELINUX
     // Set up SELinux, including loading the SELinux policy if we're in the kernel domain.
     selinux_initialize(is_first_stage);
-#endif
 
     // If we're in the kernel domain, re-exec init to transition to the init domain now
     // that the SELinux policy has been loaded.
